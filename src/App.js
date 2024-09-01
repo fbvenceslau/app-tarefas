@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Cabecalho from './components/Cabecalho';
+import NovaTarefa from './components/NovaTarefa';
+import ListaTarefas from './components/ListaTarefas';
+import { createContext } from 'react';
 
-function App() {
+
+export const TarefasContext = createContext(null);
+
+export default function App() {
+
+
+  const [tarefas, setTarefas] = useState([
+    { id: 1, titulo: 'Estudar React', completa: false },
+    { id: 2, titulo: 'Estudar Node', completa: true }
+  ]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TarefasContext.Provider value={[ tarefas, setTarefas ]}>
+        <Cabecalho />
+        <NovaTarefa />
+        <ListaTarefas titulo="Tarefas Pendentes:" 
+            tarefasFiltradas={tarefas.filter(t => !t.completa)} />
+        <ListaTarefas titulo="Tarefas Concluídas:" 
+            tarefasFiltradas={tarefas.filter(t => t.completa)} />
+      </TarefasContext.Provider>
     </div>
   );
 }
-
-export default App;
